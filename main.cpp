@@ -1,39 +1,39 @@
 // Code_analyzer.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-
 #include <thread>
 #include <iostream>
-#include "Code_analyzer.h"
 
+#include "CodeAnalyzer.h"
 
 int main()
 {
-    string directory_path = "C:/Users/Ziolushka/Documents/";
-    auto start_timer = chrono::high_resolution_clock::now();
-    vector<thread> vector_threads;
+    std::string directory_path = "C:/Users/Ziolushka/Documents/2048/";
 
-    File_finder ff(directory_path);
-    ff.findFiles();
+    FileFinder ff(directory_path);
+    ff.FindFiles();
+    CodeAnalyzer ca(directory_path);
 
-    Code_analyzer ca;
-
-    for (int i = 0; i < ff.getFileCount(); ++i) {
-        string current_file = ff.getFilePath(i);
-        vector_threads.emplace_back(thread(&Code_analyzer::doAnalyze, ref(ca), current_file)); //paralel
-        //ca.doAnalyze(current_file); 
+    std::vector<std::thread> vector_threads;
+    auto start_timer = std::chrono::high_resolution_clock::now();
+    
+    for (int i = 0; i < ff.get_file_count(); ++i) 
+    {
+        std::string current_file = ff.get_directory_files_pathes_at(i);
+        vector_threads.emplace_back(std::thread(&CodeAnalyzer::DoAnalyze, std::ref(ca), current_file)); //paralel 
+        //ca.DoAnalyze(current_file); //sequential
     }
 
     for (auto& th : vector_threads)
         if (th.joinable())
             th.join();
 
-    auto stop_timer = chrono::high_resolution_clock::now();
-    auto time_of_execution = chrono::duration_cast<chrono::microseconds>(stop_timer - start_timer); //milliseconds
+    auto stop_timer = std::chrono::high_resolution_clock::now();
+    auto time_of_execution = std::chrono::duration_cast<std::chrono::microseconds>(stop_timer - start_timer);
 
-    cout << "Time of execution " << to_string(time_of_execution.count()) << endl
-        << "Number of processed files "<< ff.getFileCount() << endl;
-    
-    ca.saveResult(directory_path);
+    std::cout << "Time of execution " << std::to_string(time_of_execution.count()) << " microseconds." << std::endl
+         << "Number of processed files " << std::to_string(ff.get_file_count()) << "." << std::endl
+         << "Results are saved in the directory " << directory_path << ", file \"Result.txt\"." << std::endl;
+    ca.SaveResult();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
