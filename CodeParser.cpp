@@ -1,5 +1,5 @@
 #include "CodeParser.h"
-#include <iostream>
+
 
 void CodeParser::DoParse(const std::string &file_path) 
 {
@@ -16,7 +16,6 @@ void CodeParser::DoParse(const std::string &file_path)
 
 	while (getline(read_file,text)) 
 	{
-		
 		if (text.empty())
 			m_blank_lines_count++;
 		

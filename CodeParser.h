@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <fstream>
 #include <string>
 #include <regex>
@@ -23,6 +24,6 @@ class CodeParser
 		int m_comment_lines_count = 0;
 		int m_code_lines_count = 0;
 		int m_physical_lines_count = 0;
-		std::string m_cpp_file_path = "";
+		std::string m_cpp_file_path = {};
 };
 
